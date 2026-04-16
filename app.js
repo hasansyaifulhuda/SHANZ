@@ -33,7 +33,7 @@ adminToggle.addEventListener("click", () => {
   if (clickCount === 1) {
     timer = setTimeout(() => {
       clickCount = 0;
-    }, 500);
+    }, 700);
   }
 
   if (clickCount === 5) {
