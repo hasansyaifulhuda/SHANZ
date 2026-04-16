@@ -1,0 +1,230 @@
+:root {
+  --bg: #0f172a;
+  --card: #111827;
+
+  --primary: #6366f1;
+  --primary-soft: #1e293b;
+
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+
+  --border: #1f2937;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 🌌 BACKGROUND DARK GRADIENT */
+body {
+  font-family: Inter, sans-serif;
+
+  background: radial-gradient(circle at top, #1e293b, #020617);
+
+  padding: 24px;
+  max-width: 640px;
+  margin: auto;
+  color: var(--text-main);
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.header h1 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/* ADMIN */
+.admin-toggle {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* LIST */
+#list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 100px;
+}
+
+/* 💎 CARD DARK GLASS */
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 16px 18px;
+  border-radius: 14px;
+
+  background: rgba(17, 24, 39, 0.7);
+
+  border: 1px solid rgba(255,255,255,0.05);
+
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+  transition: all 0.25s ease;
+}
+
+/* ✨ HOVER */
+body.admin-mode .card:hover {
+  background: rgba(30, 41, 59, 0.9);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+}
+
+/* CHECKED */
+.card.checked .email,
+.card.checked .password {
+  text-decoration: line-through;
+  opacity: 0.4;
+}
+
+/* TEXT */
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.email {
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.password {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* CHECKBOX */
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #6366f1;
+}
+
+/* 🚀 FAB */
+#fab {
+  position: fixed;
+  bottom: 24px;
+  right: calc(50% - 320px + 24px);  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+
+  font-size: 30px;
+
+  box-shadow: 0 10px 30px rgba(99,102,241,0.5);
+
+  display: none;
+}
+
+body.admin-mode #fab {
+  display: block;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: #111827;
+  padding: 22px;
+  border-radius: 14px;
+  width: 320px;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+.modal-content input {
+  background: #020617;
+  color: white;
+  border: 1px solid #1f2937;
+}
+
+.modal-content input:focus {
+  border-color: #6366f1;
+  outline: none;
+}
+@media (max-width: 640px) {
+  #fab {
+    right: 20px;
+  }
+}
+/* ✨ FIX MODAL BIAR BAGUS */
+.modal-content input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+/* placeholder */
+.modal-content input::placeholder {
+  color: #6b7280;
+}
+
+/* tombol */
+.btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* simpan */
+.btn-save {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+}
+
+/* batal */
+.btn-cancel {
+  background: #1f2937;
+  color: #e5e7eb;
+}
+
+/* hapus */
+.btn-delete {
+  background: #ef4444;
+  color: white;
+}
+.add-mode .btn-delete {
+  display: none;
+}
+.modal-actions {
+  display: flex;
+  gap: 8px;
+
+  margin-top: 1px;  /* jarak ke atas */
+  padding-top: 10px; /* tambahan ruang */
+}
