@@ -19,11 +19,12 @@ const DOM = {
   title: $('#modal-title')
 };
 
-
 const modalContent = document.querySelector(".modal-content");
-
 const adminToggle = document.getElementById("admin-toggle");
 
+/* =======================
+   🔐 ADMIN MODE (TAP 5x)
+======================= */
 let clickCount = 0;
 let timer = null;
 
@@ -40,12 +41,32 @@ adminToggle.addEventListener("click", () => {
     clearTimeout(timer);
     clickCount = 0;
 
-    isAdmin = !isAdmin; // 🔥 penting
-    document.body.classList.toggle("admin-mode", isAdmin);
-    adminToggle.classList.toggle("active");
+    toggleAdmin();
   }
 });
 
+/* =======================
+   💻 ADMIN MODE (CTRL + A)
+======================= */
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.key.toLowerCase() === "a") {
+    e.preventDefault();
+    toggleAdmin();
+  }
+});
+
+/* =======================
+   🔁 TOGGLE ADMIN
+======================= */
+function toggleAdmin() {
+  isAdmin = !isAdmin;
+  document.body.classList.toggle("admin-mode", isAdmin);
+  adminToggle.classList.toggle("active");
+}
+
+/* =======================
+   SORT DATA
+======================= */
 function sortData(data) {
   return data.sort((a, b) => {
     if (a.checked === b.checked) {
@@ -55,6 +76,9 @@ function sortData(data) {
   });
 }
 
+/* =======================
+   LOAD DATA
+======================= */
 async function loadData() {
   const { data } = await supabase.from("accounts").select("*");
   accounts = sortData(data || []);
@@ -62,63 +86,63 @@ async function loadData() {
   render();
 }
 
+/* =======================
+   RENDER
+======================= */
 function render() {
   DOM.list.innerHTML = "";
 
-document.getElementById("total-count").innerText = accounts.length;
+  // TOTAL
+  document.getElementById("total-count").innerText = accounts.length;
 
-  // SELESAI (yang dicentang)
+  // SELESAI
   const checked = accounts.filter(a => a.checked).length;
   document.getElementById("checked-count").innerText = checked;
 
   accounts.forEach(a => {
-   const card = document.createElement("div");
-card.className = "card " + (a.checked ? "checked" : "");
+    const card = document.createElement("div");
+    card.className = "card " + (a.checked ? "checked" : "");
 
-card.innerHTML = `
-  <div class="card-content">
-    <div class="email">${a.email}</div>
-    <div class="password">${"•".repeat(a.password.length)}</div>
-  </div>
-  <div class="checkbox-container">
-    <input type="checkbox" ${a.checked ? "checked" : ""}>
-  </div>
-`;
+    card.innerHTML = `
+      <div class="card-content">
+        <div class="email">${a.email}</div>
+        <div class="password">${"•".repeat(a.password.length)}</div>
+      </div>
+      <div class="checkbox-container">
+        <input type="checkbox" ${a.checked ? "checked" : ""}>
+      </div>
+    `;
 
-/* ✅ klik area email/password = EDIT */
-const content = card.querySelector(".card-content");
-content.onclick = () => {
-  if (isAdmin) {
-    openModal(a);
-  }
-};
+    /* ✏️ EDIT (klik kiri) */
+    const content = card.querySelector(".card-content");
+    content.onclick = () => {
+      if (isAdmin) openModal(a);
+    };
 
-/* ✅ checkbox tetap jalan normal */
-const checkbox = card.querySelector("input");
-checkbox.onchange = async (e) => {
-  a.checked = e.target.checked;
+    /* ☑️ CHECKBOX */
+    const checkbox = card.querySelector("input");
+    checkbox.onchange = async (e) => {
+      a.checked = e.target.checked;
 
-  await supabase
-    .from("accounts")
-    .update({ checked: a.checked })
-    .eq("id", a.id);
+      await supabase
+        .from("accounts")
+        .update({ checked: a.checked })
+        .eq("id", a.id);
 
-  loadData();
-};
-
-    if (isAdmin) {
-      card.querySelector(".card-content").onclick = () => openModal(a);
-    }
+      loadData();
+    };
 
     DOM.list.appendChild(card);
   });
 }
 
+/* =======================
+   MODAL
+======================= */
 function openModal(data = null) {
   DOM.modal.classList.add("active");
 
   if (data) {
-    // ✅ MODE EDIT
     modalContent.classList.remove("add-mode");
 
     DOM.title.innerText = "Edit Data";
@@ -127,7 +151,6 @@ function openModal(data = null) {
     DOM.password.value = data.password;
 
   } else {
-    // ✅ MODE TAMBAH
     modalContent.classList.add("add-mode");
 
     DOM.title.innerText = "Tambah Data";
@@ -141,6 +164,9 @@ function closeModal() {
   DOM.modal.classList.remove("active");
 }
 
+/* =======================
+   SAVE
+======================= */
 DOM.save.onclick = async () => {
   const id = DOM.id.value;
   const email = DOM.email.value;
@@ -163,6 +189,9 @@ DOM.save.onclick = async () => {
   loadData();
 };
 
+/* =======================
+   DELETE
+======================= */
 DOM.del.onclick = async () => {
   await supabase
     .from("accounts")
@@ -175,6 +204,12 @@ DOM.del.onclick = async () => {
 
 DOM.cancel.onclick = closeModal;
 
+/* =======================
+   FAB
+======================= */
 DOM.fab.onclick = () => openModal();
 
+/* =======================
+   INIT
+======================= */
 document.addEventListener("DOMContentLoaded", loadData);
