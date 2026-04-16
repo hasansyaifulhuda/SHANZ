@@ -311,3 +311,12 @@ body.admin-mode #fab {
   color: #6366f1;
   font-weight: 600;
 }
+/* ❌ default: sembunyikan checkbox */
+.checkbox-container {
+  display: none;
+}
+
+/* ✅ tampilkan hanya saat admin */
+body.admin-mode .checkbox-container {
+  display: flex;
+}
